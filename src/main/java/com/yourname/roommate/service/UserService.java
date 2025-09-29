@@ -4,6 +4,6 @@ import com.yourname.roommate.entity.User;
 
 public interface UserService {
 
-    User registration(User user);
+    User registerUser(User user);
     User loginUser(String email , String password);
 }
