@@ -7,35 +7,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    // Signup API
-    @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody User user){
+    // Registration API
+    @PostMapping("/register")
+    public ResponseEntity<User> registerUser(@RequestBody User user) {
         User savedUser = userService.registerUser(user);
         return ResponseEntity.ok(savedUser);
     }
 
     // Login API
     @PostMapping("/login")
-    public ResponseEntity<User> login(@RequestBody LoginRequest request){
-        User user = userService.loginUser(request.getEmail(), request.getPassword());
+    public ResponseEntity<User> loginUser(@RequestParam String email, @RequestParam String password) {
+        User user = userService.loginUser(email, password);
         return ResponseEntity.ok(user);
-    }
-
-    // DTO for login request
-    public static class LoginRequest {
-        private String email;
-        private String password;
-
-        public String getEmail() { return email; }
-        public void setEmail(String email) { this.email = email; }
-
-        public String getPassword() { return password; }
-        public void setPassword(String password) { this.password = password; }
     }
 }

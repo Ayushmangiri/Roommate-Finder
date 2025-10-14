@@ -13,6 +13,7 @@ import javax.management.relation.Role;
 @Builder
 
 public class User {
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;

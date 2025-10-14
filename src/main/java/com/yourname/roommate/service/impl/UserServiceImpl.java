@@ -5,29 +5,27 @@ import com.yourname.roommate.repository.UserRepository;
 import com.yourname.roommate.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
+    private UserRepository userRepository;
 
-    private UserRepository userRepository;//DB m Bridge
-
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();// passwords ko encrypt  ....iss line se.
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public User registerUser(User user) {
 
-        // Email Checked
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new RuntimeException("Email already exists");
-
         }
 
-//password encrypt
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-//Default role assign
+
         user.setRole(User.Role.USER);
-        //Save user
+
         return userRepository.save(user);
     }
 
@@ -36,11 +34,13 @@ public class UserServiceImpl implements UserService {
         User existingUser = userRepository.findByEmail(email);
 
         if (existingUser == null) {
-            throw new RuntimeException("User not find");
+            throw new RuntimeException("User not found");
         }
+
         if (!passwordEncoder.matches(password, existingUser.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
+
         return existingUser;
     }
 }
